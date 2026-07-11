@@ -3,14 +3,14 @@
 **Test date:** 2026-07-11  
 **Documentation tested:** <https://nfdi-jupyter.de/users/jupyterlab/ghactions/>  
 **Test repository:** <https://github.com/arnim/test-nfdi-notebook-validation-20260711>  
-**Fixture commit:** `ae8f83a`  
+**Fixture commit:** `f570d26`
 **Upstream action observed:** `NFDI-Jupyter/ghactions@742b80b1262cd527dcbf15092cb90c80bbe0d589`
 
 No API token is stored in this repository or report.
 
 ## Result summary
 
-The documented workflow works end-to-end. Directory filtering, nested-notebook discovery, successful execution, notebook-error propagation, GitHub failure annotations, secret masking, and job cleanup all behaved as expected.
+The documented workflow works end-to-end. Directory filtering, nested-notebook discovery, successful execution, realistic notebook-error propagation, GitHub failure annotations, secret masking, and job cleanup all behaved as expected.
 
 | Test | Expected | Result |
 |---|---|---|
@@ -21,6 +21,7 @@ The documented workflow works end-to-end. Directory filtering, nested-notebook d
 | Workflow/YAML and notebook/JSON syntax | Valid | PASS |
 | Selected-directory end-to-end workflow | Two selected notebooks pass; excluded failure is not run | PASS |
 | All-notebooks end-to-end workflow | Intentional notebook error fails the GitHub job | PASS |
+| Realistic execution-error workflow | Missing dependency and division-by-zero errors both fail and are reported | PASS |
 | Completed-job cleanup | No named servers remain | PASS |
 | Secret hygiene | Exact API token absent from public logs | PASS |
 | Action client unit/edge tests | Eight tests pass | PASS |
@@ -55,7 +56,19 @@ Observed service result:
 - Overall: exit code 1
 - The composite action returned exit code 1, marked the workflow as failed, and emitted a GitHub error annotation.
 
-The action's cleanup step ran after both the successful and failed executions. A subsequent API check showed zero named servers and zero active servers for the test account.
+### Realistic notebook errors — expected failure
+
+[GitHub Actions run 29134069481](https://github.com/arnim/test-nfdi-notebook-validation-20260711/actions/runs/29134069481) failed as expected in 46 seconds of job time.
+
+This dedicated run selected only `realistic-errors` and executed two notebooks:
+
+- `missing_dependency.ipynb` completed its setup cell and then raised `ModuleNotFoundError` for a dependency deliberately omitted from `requirements.txt`.
+- `runtime_calculation_error.ipynb` completed its setup cell and then raised `ZeroDivisionError` when real input data contained a zero denominator.
+- Both notebooks received exit code 1, the service returned overall exit code 1, and the GitHub job failed with exit code 1.
+- Papermill stopped each notebook at its failing cell; cells after the errors did not execute.
+- The service continued to the second notebook after the first failed, so the result reported both errors in one run.
+
+The action's cleanup step ran after all successful and failed executions. A subsequent API check showed zero named servers and zero active servers for the test account.
 
 ## Static and edge-case tests
 
