@@ -1,0 +1,1 @@
+# Deliberately no third-party dependencies: validation tests the clean Python environment.
