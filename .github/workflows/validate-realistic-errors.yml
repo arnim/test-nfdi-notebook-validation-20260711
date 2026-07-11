@@ -1,0 +1,20 @@
+name: NFDI validation - realistic execution errors (expected failure)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  notebooks:
+    runs-on: ubuntu-latest
+    environment: jupyter4nfdi
+    timeout-minutes: 30
+    steps:
+      - name: Validate realistically failing notebooks on Jupyter4NFDI
+        uses: NFDI-Jupyter/ghactions/.github/actions/notebooks@main
+        with:
+          repo: ${{ github.repository }}
+          ref: ${{ github.ref_name }}
+          notebook_dirs: '["realistic-errors"]'
+          poll_interval: "5"
+          max_wait: "1500"
+          token: ${{ secrets.JUPYTERHUB_API_TOKEN }}

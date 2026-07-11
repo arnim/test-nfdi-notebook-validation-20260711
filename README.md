@@ -9,7 +9,10 @@ See the [test report](TEST_REPORT.md) for results, run links, and recommendation
 - `notebooks/pass.ipynb`: should execute successfully.
 - `examples/nested/pass_nested.ipynb`: should execute successfully.
 - `excluded/intentional_failure.ipynb`: deliberately raises an exception.
+- `realistic-errors/missing_dependency.ipynb`: fails with `ModuleNotFoundError`.
+- `realistic-errors/runtime_calculation_error.ipynb`: fails with `ZeroDivisionError`.
 - `validate-selected.yml`: validates only `notebooks` and `examples`; expected to pass.
 - `validate-all-expected-failure.yml`: validates every notebook; expected to fail.
+- `validate-realistic-errors.yml`: validates only the realistic error cases; expected to fail.
 
 The workflows are manual-only so this repository consumes no scheduled resources.
