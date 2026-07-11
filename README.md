@@ -2,6 +2,8 @@
 
 Disposable end-to-end test repository for the Jupyter4NFDI automated notebook validation GitHub Action.
 
+See the [test report](TEST_REPORT.md) for results, run links, and recommendations.
+
 ## Test layout
 
 - `notebooks/pass.ipynb`: should execute successfully.
