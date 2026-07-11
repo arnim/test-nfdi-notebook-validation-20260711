@@ -92,6 +92,8 @@ The main documented user path is functional and correctly distinguishes passing 
 
 6. **Minor log clarity.** Cleanup prints `Job cancelled via cleanup` even after a job has already stopped successfully. `Job cleaned up` would be less misleading.
 
+7. **Permissive live API payload validation.** An authenticated `POST {}` to `/hub/api/job` returned HTTP 201 and allocated a job instead of rejecting the missing repository options. The test job was immediately deleted. If a default job is intentional, document it; otherwise require the Repo2Docker fields before allocating resources.
+
 ### Documentation corrections
 
 - Correct `papaermill` to `papermill`.
